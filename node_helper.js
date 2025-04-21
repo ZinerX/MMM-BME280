@@ -36,6 +36,10 @@ module.exports = NodeHelper.create({
 					humidity: arr[1],
 					press: arr[2],
 				});
+
+				if (arr[0] > 23) {
+					self.sendSocketNotification('ACNOTIFY', true);
+				}
 			});
 		}
 	}

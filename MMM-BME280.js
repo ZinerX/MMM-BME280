@@ -16,7 +16,7 @@ Module.register("MMM-BME280", {
         this.temperature = 'Loading...';
         this.humidity = 'Loading...';
         this.pressure = 'Loading...';
-
+        this.airConOnPersist = false;
         this.update();
         setInterval(
             this.update.bind(this),
@@ -106,6 +106,13 @@ Module.register("MMM-BME280", {
         table.appendChild(tbdy);
         wrapper.appendChild(table);
 
+        if (this.airConOn) {
+            var acDiv = document.createElement("div");
+            acDiv.className = "bme-text";
+            acDiv.innerText = "Air conditioner is turned on.";
+            wrapper.appendChild(acDiv);
+        }
+
         return wrapper;
     },
 
@@ -114,6 +121,12 @@ Module.register("MMM-BME280", {
             this.temperature = payload.temp;
             this.humidity = payload.humidity;
             this.pressure = payload.press;
+            this.updateDom();
+        }
+        if (notification === "ACNOTIFY" && payload && !this.airConOnPersist) {
+            this.airConOn = true;
+            this.airConOnPersist = true;
+            this.sendNotification("ACNOTIFY", true);
             this.updateDom();
         }
     },
