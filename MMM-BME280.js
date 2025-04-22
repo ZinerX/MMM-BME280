@@ -121,6 +121,7 @@ Module.register("MMM-BME280", {
             this.temperature = payload.temp;
             this.humidity = payload.humidity;
             this.pressure = payload.press;
+            this.sendNotification("DATA", payload);
             this.updateDom();
         }
         if (notification === "ACNOTIFY" && payload && !this.airConOnPersist) {
